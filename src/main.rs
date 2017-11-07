@@ -6,6 +6,7 @@ use std::process;
 extern {
     fn hello();
     fn place(place: *const c_char);
+    fn multiply(x: i32, y: i32) -> i32;
 }
 
 fn main () {
@@ -23,8 +24,34 @@ fn run() -> Result<(), Error> {
     let city = "Prague";
     
     let c_place = CString::new(city)?;
-    
+
     unsafe { place(c_place.as_ptr()) }
     
+
+    let m;
+
+    unsafe {  
+    	m = multiply(2, 3); 
+    }
+
+    println!("Multiply value: {}", m);
+
     Ok(())
+}
+
+#[cfg(test)]
+mod test {
+
+	use super::*;
+
+	#[test]
+	fn multiply_compute () {
+
+		let m;
+		unsafe {
+			m = multiply(2,3);
+			}
+
+		assert_eq!(6, m);
+	}
 }
