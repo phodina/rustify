@@ -1,0 +1,11 @@
+[package]
+name = "rustify"
+version = "0.1.0"
+authors = ["Petr Hodina <hodinapetr46@gmail.com>"]
+build = "build.rs"
+
+[build-dependencies]
+cc = "1"
+
+[dependencies]
+error-chain = "0.11"
