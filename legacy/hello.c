@@ -2,6 +2,10 @@
 
 
 void hello() {
+#ifdef SAY_HI
+	printf ("%s", SAY_HI);
+#endif
+
     printf("Hello from C!\n");
 }
 
