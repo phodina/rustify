@@ -9,3 +9,4 @@ cc = "1"
 
 [dependencies]
 error-chain = "0.11"
+clap = "2.27.1"

@@ -1,57 +1,33 @@
-use std::ffi::CString;
-use std::io::Error;
-use std::os::raw::c_char;
+extern crate clap;
+
+use clap::{Arg, App};
 use std::process;
 
-extern {
-    fn hello();
-    fn place(place: *const c_char);
-    fn multiply(x: i32, y: i32) -> i32;
-}
+mod core;
 
 fn main () {
 
- 	if let Err(e) = run() {
+    let matches = App::new("Rustify")
+        .version("0.1.0")
+        .author("Petr Hodina <hodinapetr46@gmail.com>")
+        .about("Calls functions from C/C++ libs")
+        .arg(Arg::with_name("hello")
+            .short("h")
+            .long("hello")
+            .help("Calls hello function from C lib"))
+        .arg(Arg::with_name("place")
+            .short("p")
+            .long("place")
+            .min_values(0)
+            .help("Calls place function from C lib"))
+        .arg(Arg::with_name("multiply")
+            .short("m")
+            .long("multiply")
+            .help("Calls multiply function from C++ lib"))
+        .get_matches();
+
+    if let Err(e) = core::run(matches) {
         eprintln!("Application error: {}", e);
-		process::exit(1);
-	}
-}
-
-fn run() -> Result<(), Error> {
-    
-    unsafe { hello() }
-
-    let city = "Prague";
-    
-    let c_place = CString::new(city)?;
-
-    unsafe { place(c_place.as_ptr()) }
-    
-
-    let m;
-
-    unsafe {  
-    	m = multiply(2, 3); 
+        process::exit(1);
     }
-
-    println!("Multiply value: {}", m);
-
-    Ok(())
-}
-
-#[cfg(test)]
-mod test {
-
-	use super::*;
-
-	#[test]
-	fn multiply_compute () {
-
-		let m;
-		unsafe {
-			m = multiply(2,3);
-			}
-
-		assert_eq!(6, m);
-	}
 }
