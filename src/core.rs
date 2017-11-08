@@ -1,25 +1,46 @@
 extern crate clap;
-
 use std::ffi::CString;
 use std::io::Error;
 use std::os::raw::c_char;
 
 
-extern {
-    #[no_mangle]
-    fn hello();
-    #[no_mangle]
-    fn place(place: *const c_char);
-    #[no_mangle]
-    fn multiply(x: i32, y: i32) -> i32;
+
+
+mod lib {
+
+    use super::c_char;
+
+    extern {
+        pub fn hello();
+        pub fn multiply(x: i32, y: i32) -> i32;
+        pub fn place(city: *const c_char);
+    }
 }
 
+fn hello () {
+
+    unsafe { lib::hello(); }
+    }
+
+fn multiply (x: i32, y: i32) -> i32 {
+
+    let m;
+    
+    unsafe { m = lib::multiply(x, y); }
+
+    m
+    }
+
+fn place (city: *const c_char) {
+
+    unsafe { lib::place(city) }
+}
 
 pub fn run(matches: clap::ArgMatches) -> Result<(), Error> {
     
     if matches.is_present("hello") {
 
-        unsafe { hello() }
+        hello();
         }
 
     if matches.is_present("place") {
@@ -34,16 +55,12 @@ pub fn run(matches: clap::ArgMatches) -> Result<(), Error> {
             Some(city) =>c_place = CString::new(city)?,
             }
 
-        unsafe { place(c_place.as_ptr()) }
+        place(c_place.as_ptr());
         }
 
     if matches.is_present("multiply") {
 
-        let m;
-
-        unsafe {  
-            m = multiply(2, 3); 
-        }
+        let m = multiply(2, 3); 
 
         println!("Multiply value: {}", m);
         }

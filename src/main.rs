@@ -1,5 +1,6 @@
 extern crate clap;
 
+use std::fs::File;
 use clap::{Arg, App};
 use std::process;
 
