@@ -5,6 +5,7 @@ authors = ["Petr Hodina <hodinapetr46@gmail.com>"]
 build = "build.rs"
 
 [build-dependencies]
+bindgen = "0.31.3"
 cc = "1"
 
 [dependencies]

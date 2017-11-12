@@ -1,20 +1,16 @@
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+
 extern crate clap;
 use std::ffi::CString;
 use std::io::Error;
 use std::os::raw::c_char;
 
 
-
-
 mod lib {
 
-    use super::c_char;
-
-    extern {
-        pub fn hello();
-        pub fn multiply(x: i32, y: i32) -> i32;
-        pub fn place(city: *const c_char);
-    }
+include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 }
 
 fn hello () {
